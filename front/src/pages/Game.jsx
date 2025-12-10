@@ -4,12 +4,27 @@ import api from "../api/axios";
 import Loading from "../components/Loading";
 import Match from "../components/Match";
 import Result from "../components/Result";
+import "../styles/Game.css";
 
 export default function Game() {
   const location = useLocation();
   const navigate = useNavigate();
 
   const { round = 16, genre = "ALL" } = location.state || {};
+
+  const genreNames = {
+    ALL: "전체 랜덤",
+    28: "액션",
+    10749: "로맨스",
+    35: "코미디",
+    27: "공포",
+    878: "SF / 판타지",
+    16: "애니메이션",
+    18: "드라마",
+    80: "범죄",
+  };
+
+  const genreName = genreNames[genre] || "장르";
 
   const [movies, setMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,20 +36,16 @@ export default function Game() {
 
   // 1. 후보 불러오기
   useEffect(() => {
-    console.log("📥 게임 설정 수신:", { round, genre });
-
     if (!round) return;
 
     setLoading(true);
     setErrorMsg("");
     setWinner(null);
 
-    // 🌟 [수정 포인트 1] 주소를 '/game/candidates' 가 아니라 '/movies' 로 변경!
     api
       .get(`/movies`, {
-        // 👈 여기!
         params: {
-          round: round,
+          round,
           genre: genre === "ALL" ? undefined : genre,
         },
       })
@@ -54,10 +65,7 @@ export default function Game() {
           setMatchCount(0);
         }
       })
-      .catch((err) => {
-        console.error("API 에러:", err);
-        setErrorMsg("서버와 연결할 수 없습니다.");
-      })
+      .catch(() => setErrorMsg("서버와 연결할 수 없습니다."))
       .finally(() => setLoading(false));
   }, [genre, round]);
 
@@ -70,12 +78,9 @@ export default function Game() {
     const winnerId = winnerMovie.id;
     const loserId = left.id === winnerId ? right.id : left.id;
 
-    // 🌟 [수정 포인트 2] 주소를 '/game/result' 가 아니라 '/movies/result' 로 변경!
     try {
-      await api.post(`/movies/result`, { winnerId, loserId }); // 👈 여기!
-    } catch (e) {
-      console.error("결과 저장 실패:", e);
-    }
+      await api.post(`/movies/result`, { winnerId, loserId });
+    } catch {}
 
     setMatchCount((prev) => prev + 1);
     const updatedNextRound = [...nextRound, winnerMovie];
@@ -86,8 +91,7 @@ export default function Game() {
 
     if (isRoundFinished) {
       if (updatedNextRound.length === 1) {
-        const final = updatedNextRound[0];
-        setWinner(final);
+        setWinner(updatedNextRound[0]);
         return;
       }
       setMovies(updatedNextRound);
@@ -98,25 +102,19 @@ export default function Game() {
     }
   };
 
-  // 3. 렌더링 (그대로 유지)
+  // Winner 확인
   if (winner) {
     return <Result movie={winner} onRestart={() => navigate("/")} />;
   }
 
   if (loading) return <Loading />;
-  if (errorMsg)
-    return (
-      <div style={{ textAlign: "center", color: "white", marginTop: 50 }}>
-        {errorMsg}
-      </div>
-    );
+  if (errorMsg) return <div className="error-msg">{errorMsg}</div>;
   if (movies.length === 0) return null;
 
   const left = movies[currentIndex];
   const right = movies[currentIndex + 1];
 
-  if (!left || !right)
-    return <div style={{ color: "white" }}>매칭 데이터 오류</div>;
+  if (!left || !right) return <div className="error-msg">매칭 데이터 오류</div>;
 
   const currentRoundSize = movies.length;
   const currentRoundLabel =
@@ -125,18 +123,14 @@ export default function Game() {
   const currentMatchInRound = Math.floor(currentIndex / 2) + 1;
 
   return (
-    <div className="tournament-container">
-      {/* 🌟 선택된 라운드를 보여줌 (선택된 강수) */}
-      <h1 style={{ color: "white", textAlign: "center", marginTop: "20px" }}>
-        {round}강전 시작! {/* round 변수 사용 */}
-      </h1>
-      <h2
-        className="round-label"
-        style={{ color: "#ddd", textAlign: "center" }}
-      >
+    <>
+      <h2 className="round-label">
+        {`${genreName} 영화 월드컵 `}
         {currentRoundLabel} ({currentMatchInRound}/{totalMatchesThisRound})
       </h2>
-      <Match left={left} right={right} onSelect={handleSelect} />
-    </div>
+      <div className="tournament-container">
+        <Match left={left} right={right} onSelect={handleSelect} />
+      </div>
+    </>
   );
 }

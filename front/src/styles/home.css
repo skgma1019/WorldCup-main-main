@@ -1,5 +1,7 @@
-/* 전체 컨테이너 */
-.home-container {
+/* ===========================
+   전체 컨테이너
+=========================== */
+.home-wrap {
   padding: 40px 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -7,8 +9,10 @@
   color: white;
 }
 
-/* 제목 */
-.title {
+/* ===========================
+   제목
+=========================== */
+.home-title {
   font-size: 3rem;
   margin-bottom: 10px;
   color: #e50914;
@@ -16,13 +20,15 @@
   text-shadow: 2px 2px 4px black;
 }
 
-.subtitle {
+.home-desc {
   font-size: 1.2rem;
-  color: #ddd;
+  color: black;
   margin-bottom: 40px;
 }
 
-/* 라운드 선택 */
+/* ===========================
+   라운드 선택 박스
+=========================== */
 .round-box {
   margin-bottom: 40px;
   padding: 15px;
@@ -48,29 +54,44 @@
   cursor: pointer;
 }
 
-/* 장르 카드 그리드 */
+/* ===========================
+   장르 카드 그리드
+=========================== */
 .genre-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 🔥 고정 3개 */
-  gap: 30px; /* 카드 사이 거리 */
+  grid-template-columns: repeat(3, 1fr); /* 3개 고정 */
+  gap: 30px;
   justify-content: center;
 }
 
-/* 카드 */
+/* ===========================
+   카드
+=========================== */
 .genre-card {
   height: 300px;
   border-radius: 15px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   background: #222;
   transition: transform 0.3s ease, border 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* 카드 hover */
 .genre-card:hover {
   transform: scale(1.03);
   border: 2px solid #e50914;
+}
+
+/* 배경 이미지 */
+.card-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.4);
+  transition: transform 0.5s, filter 0.5s;
 }
 
 .genre-card:hover .card-bg {
@@ -78,19 +99,9 @@
   transform: scale(1.1);
 }
 
-/* 배경 */
-.card-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.5s, filter 0.5s;
-}
-
-/* 카드 안의 내용 */
+/* ===========================
+   카드 내용
+=========================== */
 .card-content {
   position: relative;
   z-index: 1;
@@ -102,23 +113,26 @@
   padding: 20px;
 }
 
-.genre-name {
+.genre-title {
   font-size: 2rem;
   margin-bottom: 10px;
   font-weight: 900;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* 1위 뱃지 */
-.top-movie-badge {
+/* 1위 영화 배지 */
+.top-movie-tag {
   margin-bottom: 20px;
   background: rgba(229, 9, 20, 0.8);
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 0.85rem;
+  color: white;
 }
 
-/* 버튼 그룹 */
+/* ===========================
+   버튼 그룹
+=========================== */
 .btn-group {
   display: flex;
   gap: 10px;
@@ -127,37 +141,41 @@
   transition: 0.3s ease;
 }
 
-/* 카드 hover 시 버튼 보이기 */
+/* hover 시 버튼 표시 */
 .genre-card:hover .btn-group {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* 버튼 */
+/* ===========================
+   버튼 스타일
+=========================== */
 .btn-start,
 .btn-rank {
   padding: 10px 20px;
   border-radius: 30px;
-  border: none;
   font-weight: bold;
-  cursor: pointer;
   font-size: 1rem;
+  cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s, filter 0.2s;
 }
 
+/* 시작하기 버튼 */
 .btn-start {
+  border: none;
   background: #e50914;
   color: white;
 }
 
+/* 순위 버튼 */
 .btn-rank {
   background: rgba(0, 0, 0, 0.4);
   color: white;
   border: 2px solid white;
 }
 
-/* 버튼 hover 효과 */
+/* 공통 hover */
 button:hover {
   filter: brightness(1.2);
   transform: scale(1.05);

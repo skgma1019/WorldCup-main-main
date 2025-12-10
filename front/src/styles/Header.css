@@ -1,7 +1,6 @@
 /* 전체 헤더 */
 .header {
   display: flex;
-  border-radius: 15px;
   justify-content: space-between;
   padding: 20px;
   background: #141414;
@@ -16,7 +15,7 @@
 .logo {
   text-decoration: none;
   color: #e50914;
-  font-size: 24px;
+  font-size: 40px; /* 🔥 여기만 키우면 됨 */
   font-weight: bold;
 }
 

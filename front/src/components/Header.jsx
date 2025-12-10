@@ -16,9 +16,11 @@ export default function Header() {
   return (
     <header className="header">
       {/* 로고 */}
-      <Link to="/" className="logo">
-        MOVIE WORLD CUP 🎬
-      </Link>
+      <div id="header-title">
+        <Link to="/" className="logo">
+          🎬
+        </Link>
+      </div>
 
       <nav className="nav">
         <Link to="/rank" className="nav-link">

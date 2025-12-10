@@ -5,19 +5,18 @@
   color: white;
 }
 
-.back-btn {
+.back-link {
   color: #aaa;
   text-decoration: none;
-  display: inline-block;
   margin-bottom: 20px;
-  font-size: 0.9rem;
+  display: inline-block;
 }
 
 .rank-title {
   text-align: center;
-  margin-bottom: 10px;
   font-size: 2.5rem;
   color: #e50914;
+  margin-bottom: 10px;
 }
 
 .rank-desc {
@@ -27,66 +26,66 @@
 }
 
 /* 탭 */
-.sort-tabs {
+.tab-box {
   display: flex;
   margin-bottom: 30px;
   border-bottom: 1px solid #444;
 }
 
-.sort-tab {
+.tab-btn {
   flex: 1;
   padding: 15px;
   cursor: pointer;
-  background-color: #222;
+  background: #222;
   color: #aaa;
   border: none;
   font-size: 1.1rem;
   font-weight: bold;
-  transition: 0.2s;
   border-bottom: 3px solid transparent;
+  transition: 0.2s;
 }
 
-.sort-tab.active {
-  background-color: #e50914;
+.tab-btn.active {
+  background: #e50914;
   color: white;
   border-bottom: 3px solid white;
 }
 
-/* 테이블 */
+/* 테이블 스타일 */
 .table-wrapper {
   overflow-x: auto;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .rank-table {
   width: 100%;
   border-collapse: collapse;
+  background: #222;
   text-align: center;
-  background-color: #222;
 }
 
-.rank-table thead tr {
-  background-color: #333;
+.rank-table th {
+  background: #333;
   color: #ddd;
+  padding: 10px;
   height: 50px;
 }
 
-.rank-table th,
 .rank-table td {
+  border-bottom: 1px solid #444;
+  height: 70px;
   padding: 10px;
 }
 
-.align-left {
-  text-align: left;
+/* 순위 숫자 */
+.rank-number {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
-.rank-table tbody tr {
-  border-bottom: 1px solid #444;
-  height: 70px;
-}
-
-.movie-cell {
+/* 영화 정보 */
+.movie-info {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -99,29 +98,27 @@
   border-radius: 4px;
 }
 
-.rank-number {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.winrate-text {
+/* 값 색깔 */
+.winrate-value {
   color: #46d369;
   font-weight: bold;
 }
 
-.popularity-text {
+.popularity-value {
   color: #ffcc00;
   font-weight: bold;
 }
 
-.sub-text {
+.sub-info {
   color: #aaa;
 }
 
+/* 데이터 없음 */
 .no-data {
   padding: 30px;
 }
 
+/* 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -129,21 +126,21 @@
   margin-top: 30px;
 }
 
-.page-btn {
+.pagination button {
   background: #333;
   color: white;
-  border: none;
   padding: 10px 20px;
   border-radius: 5px;
+  border: none;
   cursor: pointer;
 }
 
-.page-btn:disabled {
+.pagination button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
-.page-number {
+.page-info {
   display: flex;
   align-items: center;
   font-size: 1.2rem;

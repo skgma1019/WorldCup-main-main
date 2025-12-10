@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import Loading from "../components/Loading";
-import "../styles/Rank.css";
+import "../styles/Rank.css"; // ⭐ CSS 추가
 
 export default function Rank() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
   const initialSort = queryParams.get("sort") || "winRate";
@@ -41,23 +42,38 @@ export default function Rank() {
   }, [location.search]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("로그인이 필요한 서비스입니다! 😅");
+      navigate("/", { state: { openLogin: true } });
+      return;
+    }
+
     const fetchRanks = async () => {
       try {
         setLoading(true);
         const res = await api.get("/ranks", {
           params: { page, genre, sort: sortBy },
         });
+
         setRanks(res.data.data);
         setTotalPages(res.data.totalPages);
       } catch (err) {
         console.error("랭킹 조회 실패:", err);
+
+        if (err.response && err.response.status === 401) {
+          alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+          localStorage.removeItem("token");
+          navigate("/", { state: { openLogin: true } });
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchRanks();
-  }, [page, genre, sortBy]);
+  }, [page, genre, sortBy, navigate]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) setPage(newPage);
@@ -73,7 +89,7 @@ export default function Rank() {
 
   return (
     <div className="rank-container">
-      <Link to="/" className="back-btn">
+      <Link to="/" className="back-link">
         ◀ 메인으로 돌아가기
       </Link>
 
@@ -86,16 +102,17 @@ export default function Rank() {
           : `${genreNames[genre]} 장르 내에서의 순위입니다.`}
       </p>
 
-      <div className="sort-tabs">
+      <div className="tab-box">
         <button
           onClick={() => setSortBy("winRate")}
-          className={`sort-tab ${sortBy === "winRate" ? "active" : ""}`}
+          className={`tab-btn ${sortBy === "winRate" ? "active" : ""}`}
         >
           🏆 유저 픽 (승률순)
         </button>
+
         <button
           onClick={() => setSortBy("popularity")}
-          className={`sort-tab ${sortBy === "popularity" ? "active" : ""}`}
+          className={`tab-btn ${sortBy === "popularity" ? "active" : ""}`}
         >
           🌍 글로벌 트렌드 (인기순)
         </button>
@@ -110,7 +127,7 @@ export default function Rank() {
               <thead>
                 <tr>
                   <th>순위</th>
-                  <th className="align-left">영화 제목</th>
+                  <th style={{ textAlign: "left" }}>영화 제목</th>
                   <th>{sortBy === "winRate" ? "승률" : "인기도"}</th>
                   <th>{sortBy === "winRate" ? "전적" : "개봉일"}</th>
                 </tr>
@@ -120,7 +137,8 @@ export default function Rank() {
                   ranks.map((movie, index) => (
                     <tr key={movie.id}>
                       <td className="rank-number">{getRankIcon(index)}</td>
-                      <td className="movie-cell">
+
+                      <td className="movie-info">
                         <img
                           src={movie.img}
                           alt={movie.name}
@@ -128,18 +146,20 @@ export default function Rank() {
                         />
                         <span>{movie.name}</span>
                       </td>
+
                       <td
                         className={
                           sortBy === "winRate"
-                            ? "winrate-text"
-                            : "popularity-text"
+                            ? "winrate-value"
+                            : "popularity-value"
                         }
                       >
                         {sortBy === "winRate"
                           ? `${parseFloat(movie.winRate).toFixed(1)}%`
                           : Math.round(movie.popularity)}
                       </td>
-                      <td className="sub-text">
+
+                      <td className="sub-info">
                         {sortBy === "winRate"
                           ? `${movie.winCount}승 / ${movie.matchCount}전`
                           : movie.release_date?.substring(0, 4) || "-"}
@@ -161,17 +181,17 @@ export default function Rank() {
             <button
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
-              className="page-btn"
             >
               ◀ 이전
             </button>
-            <span className="page-number">
+
+            <span className="page-info">
               {page} / {totalPages || 1}
             </span>
+
             <button
               onClick={() => handlePageChange(page + 1)}
               disabled={page === totalPages}
-              className="page-btn"
             >
               다음 ▶
             </button>
