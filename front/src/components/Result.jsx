@@ -39,8 +39,6 @@ export default function Result({ movie, onRestart }) {
         <h1 className="winner-title">🏆 최종 우승: {movie.name}</h1>
 
         <img className="winner-img" src={movie.img} alt={movie.name} />
-
-        {movie.overview && <p className="movie-overview">{movie.overview}</p>}
       </div>
 
       {/* ---------- 오른쪽: AI 추천 영화 ---------- */}
@@ -69,6 +67,8 @@ export default function Result({ movie, onRestart }) {
         <button className="restart-btn" onClick={onRestart}>
           다시하기
         </button>
+        <h2 className="story">줄거리</h2>
+        {movie.overview && <p className="movie-overview">{movie.overview}</p>}
       </div>
     </div>
   );
